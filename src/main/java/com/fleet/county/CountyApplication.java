@@ -29,21 +29,21 @@ public class CountyApplication implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		List<County> users = loadUsersFromJson();
-		saveUsersToDatabase(users);
+		List<County> jsonData = loadDataFromJson();
+		saveDataToDatabase(jsonData);
 	}
 
-	private List<County> loadUsersFromJson() throws IOException {
+	private List<County> loadDataFromJson() throws IOException {
 		InputStream inputStream = new ClassPathResource("data.json").getInputStream();
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.readValue(inputStream, new TypeReference<List<County>>() {
 		});
 	}
 
-	private void saveUsersToDatabase(List<County> users) {
-		for (County user : users) {
-			jdbcTemplate.update("INSERT INTO county (name, fips, state) VALUES (?, ?, ?)", user.getName(),
-					user.getFips(), user.getState());
+	private void saveDataToDatabase(List<County> counties) {
+		for (County county : counties) {
+			jdbcTemplate.update("INSERT INTO county (name, fips, state) VALUES (?, ?, ?)", county.getName(),
+					county.getFips(), county.getState());
 		}
 	}
 
