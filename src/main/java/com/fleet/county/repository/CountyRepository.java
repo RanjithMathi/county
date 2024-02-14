@@ -13,5 +13,7 @@ public interface CountyRepository extends JpaRepository<County, Long> {
 	public List<County> findByNameContainingIgnoreCase(String name);
 
 	public List<County> findByStateContainingIgnoreCase(String state);
+	
+	public List<County> findByStateAndNameIgnoreCase(String state, String name);
 
 }

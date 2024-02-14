@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,7 @@ public class CountyServiceImplemantation implements CountyService {
 	public List<County> countySuggestion(String q) {
 		List<County> nameWiseList = new ArrayList<>();
 		List<County> stateWiseList = new ArrayList<>();
+		List<County> finalResult = new ArrayList<>();
 		String name = null;
 		String state = null;
 		if (q.contains(",")) {
@@ -35,6 +37,10 @@ public class CountyServiceImplemantation implements CountyService {
 			}
 
 		}
+		if(null != name && state != null) {
+			return countyRepository.findByStateAndNameIgnoreCase(state.toUpperCase(),
+					Character.toUpperCase(name.charAt(0)) + name.substring(1));
+		}
 		if (null != name) {
 			nameWiseList = countyRepository.findByNameContainingIgnoreCase(name);
 		}
@@ -44,8 +50,8 @@ public class CountyServiceImplemantation implements CountyService {
 
 		Set<County> uniqueSet = new LinkedHashSet<>(nameWiseList);
 		uniqueSet.addAll(stateWiseList);
-		List<County> finalResult = new ArrayList<>(uniqueSet);
-		return finalResult;
+		 finalResult = new ArrayList<>(uniqueSet);
+		return finalResult.stream().limit(5).collect(Collectors.toList());
 
 	}
 
