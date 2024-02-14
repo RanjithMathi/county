@@ -25,8 +25,8 @@ public class CountyServiceImplemantation implements CountyService {
 		String name = null;
 		String state = null;
 		if (q.contains(",")) {
-			name = q.split(",")[0];
-			state = q.split(",")[0];
+			name = q.split(",")[0].trim();
+			state = q.split(",")[1].trim();
 		} else {
 			if (q.length() > 2) {
 				name = q;
